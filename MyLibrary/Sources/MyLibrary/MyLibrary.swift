@@ -16,24 +16,24 @@ public class MyLibrary {
             return
         }
 
-        // Fetch the current weather from the backend.
-        // If the current temperature, in Farenheit, contains an 8, then that's lucky.
-        weatherService.getTemperature { response in
-            switch response {
-            case let .failure(error):
-                print(error)
-                completion(nil)
+    //     // Fetch the current weather from the backend.
+    //     // If the current temperature, in Farenheit, contains an 8, then that's lucky.
+    //     weatherService.getTemperature { response in
+    //         switch response {
+    //         case let .failure(error):
+    //             print(error)
+    //             completion(nil)
 
-            case let .success(temperature):
-                if self.contains(temperature, "8") {
-                    completion(true)
-                } else {
-                    let isLuckyNumber = self.contains(temperature, "8")
-                    completion(isLuckyNumber)
-                }
-            }
-        }
-    }
+    //         case let .success(temperature):
+    //             if self.contains(temperature, "8") {
+    //                 completion(true)
+    //             } else {
+    //                 let isLuckyNumber = self.contains(temperature, "8")
+    //                 completion(isLuckyNumber)
+    //             }
+    //         }
+    //     }
+    // }
 
     /// Sample usage:
     ///   `contains(558, "8")` would return `true` because 588 contains 8.
@@ -42,3 +42,54 @@ public class MyLibrary {
         return String(lhs).contains(rhs)
     }
 }
+
+
+ public func printToken(completion: @escaping (String?) -> Void) {
+        var returnValue = ""
+        weatherService.userLogin { response in
+            switch response {
+            case let .failure(error):
+                print(error)
+                print("Cannot get the message")
+
+            case let .success(token):
+                print(token)
+                returnValue = token
+                completion(returnValue)
+            }
+        }
+        //return returnValue
+    }
+    
+    public func printGreetings(token:String, completion: @escaping (String?) -> Void) {
+        var returnValue = ""
+        weatherService.getHello(token: token) { response in
+            switch response {
+            case let .failure(error):
+                print(error)
+                print("Cannot get the message")
+
+            case let .success(greetings):
+                print(greetings)
+                returnValue = greetings
+                completion(returnValue)
+            }
+        }
+        //return returnValue
+    }
+    
+    public func printWeather(token: String, completion: @escaping (String?) -> Void) {
+        var returnValue = ""
+        weatherService.getWeather(token: token) { response in
+            switch response {
+            case let .failure(error):
+                print(error)
+                print("Cannot get the message")
+
+            case let .success(weather):
+                print(weather)
+                returnValue = weather
+                completion(returnValue)
+            }
+        }
+    }
